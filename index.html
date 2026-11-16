@@ -1,0 +1,89 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do/Time Management - Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="style.css" rel="stylesheet">
+    <!-- Font Awesome CDN Integration for Action Icons -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body>
+
+    <header class="app-header">
+        <h1>To-Do/Time Management-Web-App</h1>
+        <p>Where time management isn't a problem</p>
+        
+        <nav class="main-nav" aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="archive.html" class="nav-link">Archive</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="app-content">
+        <section class="task-section">
+            <h2>Today's Tasks</h2>
+            
+            <form id="task" method="POST" class="task-form">
+                <label for="taskName" class="visually-hidden">Task Name</label>
+                <input type="text" id="taskName" name="taskName" placeholder="Enter task name..." required>
+                
+                <label for="taskPriority" class="visually-hidden">Task Priority</label>
+                <select id="taskPriority" name="taskPriority" required>
+                    <option value="low">Low Priority</option>
+                    <option value="medium" selected>Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+                
+                <button class="favorite styled" type="submit">Add to task</button>
+            </form>
+            
+            <ul class="task-list" aria-label="Daily Tasks">
+                <!-- Example 1: High Priority Task -->
+                <li class="task-item priority-high">
+                    <input type="checkbox" id="task-1" class="task-checkbox" aria-label="Mark Walk the dog complete">
+                    <div class="task-details">
+                        <label for="task-1" class="task-title">Walk the dog</label>
+                        <span class="task-description">Take a 20-minute walk around the park neighborhood loop.</span>
+                        <span class="priority-tag">High</span>
+                    </div>
+                    <div class="task-actions">
+                        <button type="button" class="action-btn btn-edit" aria-label="Edit task">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="action-btn btn-delete" aria-label="Delete task">
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </li>
+
+                <!-- Example 2: Low Priority Task -->
+                <li class="task-item priority-low">
+                    <input type="checkbox" id="task-2" class="task-checkbox" aria-label="Mark Clean the dishes complete">
+                    <div class="task-details">
+                        <label for="task-2" class="task-title">Clean the dishes</label>
+                        <span class="task-description">Wash up everything remaining in the sink from lunchtime prep.</span>
+                        <span class="priority-tag">Low</span>
+                    </div>
+                    <div class="task-actions">
+                        <button type="button" class="action-btn btn-edit" aria-label="Edit task">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="action-btn btn-delete" aria-label="Delete task">
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Time Management App. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,1 +1,152 @@
+// 1. Array to store tasks temporarily in memory (pre-populated with your sample tasks)
+let tasks = [
+    {
+        id: 1,
+        title: "Walk the dog",
+        description: "Take a 20-minute walk around the park neighborhood loop.",
+        priority: "high",
+        completed: false
+    },
+    {
+        id: 2,
+        title: "Clean the dishes",
+        description: "Wash up everything remaining in the sink from lunchtime prep.",
+        priority: "low",
+        completed: false
+    }
+];
+
+// 2. Select DOM Elements
+const taskForm = document.getElementById("task");
+const taskNameInput = document.getElementById("taskName");
+const taskPrioritySelect = document.getElementById("taskPriority");
+const taskList = document.querySelector(".task-list");
+
+// 3. Function & Loop to Render Tasks from the Array
+function renderTasks() {
+    // Clear existing list items before re-rendering
+    taskList.innerHTML = "";
+
+    // Loop through the tasks array
+    for (let i = 0; i < tasks.length; i++) {
+        const task = tasks[i];
+
+        // Create the list item element
+        const li = document.createElement("li");
+        li.className = `task-item priority-${task.priority}`;
+        li.dataset.id = task.id;
+
+        // Build inner HTML matching your exact CSS structure
+        const descriptionHTML = task.description
+            ? `<span class="task-description">${escapeHTML(task.description)}</span>`
+            : "";
+
+        const priorityLabel = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+
+        li.innerHTML = `
+            <input 
+                type="checkbox" 
+                id="task-${task.id}" 
+                class="task-checkbox" 
+                aria-label="Mark ${escapeHTML(task.title)} complete"
+                ${task.completed ? "checked" : ""}
+            >
+            <div class="task-details">
+                <label for="task-${task.id}" class="task-title">${escapeHTML(task.title)}</label>
+                ${descriptionHTML}
+                <span class="priority-tag">${priorityLabel}</span>
+            </div>
+            <div class="task-actions">
+                <button type="button" class="action-btn btn-edit" aria-label="Edit task">
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="action-btn btn-delete" aria-label="Delete task">
+                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
+        `;
+
+        taskList.appendChild(li);
+    }
+}
+
+// Helper function to prevent HTML injection when rendering user input
+function escapeHTML(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// 4. Capture Form Input & Add New Task (with Empty Input Error Handling)
+taskForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent page reload from method="POST"
+
+    const title = taskNameInput.value.trim();
+    const priority = taskPrioritySelect.value;
+
+    // Basic error handling for empty or whitespace-only submissions
+    if (title === "") {
+        alert("Please enter a task name before adding.");
+        taskNameInput.focus();
+        return;
+    }
+
+    // Create new task object
+    const newTask = {
+        id: Date.now(), // Unique ID based on timestamp
+        title: title,
+        description: "", // Optional description (empty since form has no description field yet)
+        priority: priority,
+        completed: false
+    };
+
+    // Add to the array and re-render the DOM
+    tasks.push(newTask);
+    renderTasks();
+
+    // Reset the form inputs
+    taskForm.reset();
+    taskNameInput.focus();
+});
+
+// 5. Mark as Completed & Delete Task Functionality (Event Delegation)
+taskList.addEventListener("click", function (event) {
+    const taskItem = event.target.closest(".task-item");
+    if (!taskItem) return;
+
+    const taskId = Number(taskItem.dataset.id);
+
+    // Handle Checkbox Toggle (Mark as Completed)
+    if (event.target.classList.contains("task-checkbox")) {
+        toggleTaskComplete(taskId);
+    }
+
+    // Handle Delete Button Click
+    if (event.target.closest(".btn-delete")) {
+        deleteTask(taskId);
+    }
+});
+
+function toggleTaskComplete(id) {
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+            tasks[i].completed = !tasks[i].completed;
+            break;
+        }
+    }
+    // Your CSS automatically applies strikethrough via `.task-checkbox:checked ~ .task-details`
+}
+
+function deleteTask(id) {
+    // Filter out the deleted task from the array
+    tasks = tasks.filter(function (task) {
+        return task.id !== id;
+    });
+
+    // Re-render the updated list
+    renderTasks();
+}
+
+// 6. Initial Render on Page Load
+renderTasks();
 
